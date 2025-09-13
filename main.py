@@ -225,4 +225,5 @@ def options_handler(path=None):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+    # Only run the server locally, never in serverless/Vercel
+    app.run(debug=True, host='127.0.0.1', port=5000)
