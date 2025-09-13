@@ -88,5 +88,13 @@ def movie_details(imdb_id):
     similar = get_similar_movies(genre, exclude_id=imdb_id)
     return render_template('movie.html', details=details, cast=cast, reviews=reviews, similar=similar)
 
+# This enables CORS, which is needed for Vercel serverless functions
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

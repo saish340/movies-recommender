@@ -1,0 +1,8 @@
+# Use the latest Python version available on Vercel
+runtime: python3.9
+# Import Python dependencies
+imports:
+  - flask
+  - requests
+  - beautifulsoup4
+  - textblob
