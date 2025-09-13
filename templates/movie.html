@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ details.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="https://image.tmdb.org/t/p/w500{{ details.poster_path }}" class="img-fluid rounded shadow" alt="{{ details.title }} poster">
+            </div>
+            <div class="col-md-8">
+                <h2 class="text-white">{{ details.title }}</h2>
+                <p class="text-light">Release: {{ details.release_date }} | Genre: {% for g in details.genres %}{{ g.name }} {% endfor %} | Rating: {{ details.vote_average }} | Runtime: {{ details.runtime }} min</p>
+                <h5 class="text-white mt-4">Top Cast</h5>
+                <ul class="list-unstyled">
+                    {% for member in cast %}
+                    <li class="text-light">{{ member.name }} as {{ member.character }}</li>
+                    {% endfor %}
+                </ul>
+                <h5 class="text-white mt-4">User Reviews & Sentiment</h5>
+                <div>
+                    {% for review in reviews %}
+                    <div class="card mb-2 review-card">
+                        <div class="card-body">
+                            <p class="card-text">{{ review.text }}</p>
+                            <span class="badge {% if review.sentiment > 0.2 %}bg-success{% elif review.sentiment < -0.2 %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                {% if review.sentiment > 0.2 %}Positive{% elif review.sentiment < -0.2 %}Negative{% else %}Neutral{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <h5 class="text-white mt-4">Similar Movies</h5>
+                <div class="d-flex flex-wrap">
+                    {% for sim in similar %}
+                    <div class="card movie-card me-2 mb-2" style="width: 10rem;">
+                        <img src="https://image.tmdb.org/t/p/w500{{ sim.poster_path }}" class="card-img-top" alt="{{ sim.title }} poster">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ sim.title }}</h6>
+                            <a href="{{ url_for('movie_details', movie_id=sim.id) }}" class="btn btn-outline-primary btn-sm">Details</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a href="{{ url_for('home') }}" class="btn btn-secondary mt-4">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

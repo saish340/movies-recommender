@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-white">Movie Recommender</h1>
+            <p class="lead text-light">Find your next favorite movie!</p>
+        </div>
+        <form action="{{ url_for('search') }}" method="get" class="d-flex justify-content-center">
+            <input type="text" name="q" class="form-control w-50 search-bar" placeholder="Search for a movie..." autocomplete="off" id="searchInput">
+            <button type="submit" class="btn btn-primary ms-2">Search</button>
+        </form>
+        <div id="suggestions" class="suggestions-list"></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+</body>
+</html>

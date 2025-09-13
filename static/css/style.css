@@ -1,0 +1,87 @@
+body.bg-gradient {
+    background: linear-gradient(120deg, #ff6e7f 0%, #bfe9ff 100%);
+    min-height: 100vh;
+}
+.search-bar {
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 8px rgba(30,60,114,0.1);
+    transition: box-shadow 0.2s;
+}
+.search-bar:focus {
+    box-shadow: 0 4px 16px rgba(30,60,114,0.2);
+}
+/* Movie Card Modern Styles */
+.movie-card {
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(42,82,152,0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: rgba(255,255,255,0.10);
+    color: #fff;
+    overflow: hidden;
+}
+.animated-card {
+    animation: popIn 0.7s cubic-bezier(.68,-0.55,.27,1.55) both;
+}
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.movie-card:hover {
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 12px 36px rgba(255,110,127,0.25);
+}
+.card-title, .card-text {
+    color: #fff;
+}
+.btn-gradient {
+    background: linear-gradient(90deg, #ff6e7f 0%, #bfe9ff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255,110,127,0.15);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+.btn-gradient:hover {
+    background: linear-gradient(90deg, #bfe9ff 0%, #ff6e7f 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,110,127,0.25);
+}
+.btn-primary, .btn-outline-primary {
+    border-radius: 25px;
+    font-weight: 600;
+}
+.suggestions-list {
+    position: absolute;
+    z-index: 10;
+    width: 50%;
+    left: 25%;
+    background: #fff;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 2px 8px rgba(30,60,114,0.1);
+    display: none;
+}
+.suggestion-item {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+.suggestion-item:hover {
+    background: #e3eafc;
+}
+.review-card {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-radius: 15px;
+}
+@media (max-width: 768px) {
+    .search-bar, .suggestions-list {
+        width: 90%;
+        left: 5%;
+    }
+    .container {
+        padding: 1rem;
+    }
+}
