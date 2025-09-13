@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Movie Recommender - README</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; line-height: 1.6; }
+        h1 { color: #032541; }
+        h2 { color: #01b4e4; margin-top: 20px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        .note { background: #fffde7; padding: 10px; border-left: 4px solid #ffc107; margin: 20px 0; }
+        img { max-width: 100%; height: auto; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Movie Recommender App</h1>
+    <p>A modern Flask-based movie recommendation application with a sleek UI that allows users to search for movies, view details, read reviews with sentiment analysis, and discover similar films.</p>
+
+    <h2>Features</h2>
+    <ul>
+        <li>Beautiful responsive design for all device sizes</li>
+        <li>Movie search with dynamic suggestions</li>
+        <li>Detailed movie information including cast, ratings, and plot</li>
+        <li>Review sentiment analysis using TextBlob</li>
+        <li>Similar movie recommendations based on genre</li>
+        <li>Categorized movie sections: Popular, Now Playing, Top Rated, and Upcoming</li>
+        <li>Modern UI with animations, hover effects, and gradients</li>
+    </ul>
+
+    <h2>Setup Instructions</h2>
+
+    <h3>1. Install Required Packages</h3>
+    <pre>pip install flask requests beautifulsoup4 textblob</pre>
+
+    <h3>2. OMDb API Key</h3>
+    <p>This application uses the OMDb API to fetch movie data. Your API key is already set in the code: <code>8aad5b1b</code></p>
+
+    <h3>3. Run the Application</h3>
+    <pre>python main.py</pre>
+    <p>The app will be available at <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a></p>
+
+    <div class="note">
+        <p><strong>Note:</strong> For production use, consider getting your own OMDb API key and setting it as an environment variable instead of hardcoding it.</p>
+    </div>
+
+    <h2>Project Structure</h2>
+    <pre>
+movies-recommender/
+├── main.py                  # Flask backend application
+├── templates/               # HTML templates
+│   ├── home.html            # Homepage with search and movie sections
+│   ├── movie.html           # Movie details page
+│   └── search.html          # Search results page
+└── static/                  # Static files
+    ├── css/
+    │   └── style.css        # Main stylesheet
+    ├── js/
+    │   └── search.js        # JavaScript for search functionality
+    └── images/              # Image assets
+        └── no-poster.png    # Placeholder for missing posters
+    </pre>
+
+    <h2>Customization</h2>
+    <p>You can customize the application in several ways:</p>
+    <ul>
+        <li>Change the color scheme by editing CSS variables in <code>style.css</code></li>
+        <li>Modify the movie categories in <code>main.py</code></li>
+        <li>Add additional data points from the OMDb API</li>
+        <li>Extend the sentiment analysis functionality</li>
+    </ul>
+
+    <h2>Sentiment Analysis</h2>
+    <p>The app uses TextBlob to analyze reviews and categorize them as positive, negative, or neutral based on the sentiment polarity score:</p>
+    <ul>
+        <li>Positive: score > 0.2</li>
+        <li>Negative: score < -0.2</li>
+        <li>Neutral: -0.2 ≤ score ≤ 0.2</li>
+    </ul>
+</body>
+</html>

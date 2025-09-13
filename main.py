@@ -58,7 +58,17 @@ def get_imdb_reviews(imdb_id):
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    # Fetch popular and top-rated movies for the homepage
+    popular_movies = fetch_movie_data("action")[:4]  # Using action genre as a proxy for popular
+    top_rated = fetch_movie_data("drama")[:4]  # Using drama genre as a proxy for top-rated
+    now_playing = fetch_movie_data("2023")[:4]  # Using current year as a proxy for now playing
+    upcoming = fetch_movie_data("coming soon")[:4]  # Using "coming soon" as a proxy for upcoming
+    
+    return render_template('home.html', 
+                          popular=popular_movies, 
+                          top_rated=top_rated, 
+                          now_playing=now_playing, 
+                          upcoming=upcoming)
 
 @app.route('/search')
 def search():
@@ -79,4 +89,4 @@ def movie_details(imdb_id):
     return render_template('movie.html', details=details, cast=cast, reviews=reviews, similar=similar)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

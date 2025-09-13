@@ -3,53 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ details.title }}</title>
+    <title>{{ details.Title }} - MovieMagnet</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
 </head>
-<body class="bg-gradient">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-4">
-                <img src="https://image.tmdb.org/t/p/w500{{ details.poster_path }}" class="img-fluid rounded shadow" alt="{{ details.title }} poster">
-            </div>
-            <div class="col-md-8">
-                <h2 class="text-white">{{ details.title }}</h2>
-                <p class="text-light">Release: {{ details.release_date }} | Genre: {% for g in details.genres %}{{ g.name }} {% endfor %} | Rating: {{ details.vote_average }} | Runtime: {{ details.runtime }} min</p>
-                <h5 class="text-white mt-4">Top Cast</h5>
-                <ul class="list-unstyled">
-                    {% for member in cast %}
-                    <li class="text-light">{{ member.name }} as {{ member.character }}</li>
-                    {% endfor %}
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <span class="brand-text">MovieMagnet</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
                 </ul>
-                <h5 class="text-white mt-4">User Reviews & Sentiment</h5>
-                <div>
-                    {% for review in reviews %}
-                    <div class="card mb-2 review-card">
-                        <div class="card-body">
-                            <p class="card-text">{{ review.text }}</p>
-                            <span class="badge {% if review.sentiment > 0.2 %}bg-success{% elif review.sentiment < -0.2 %}bg-danger{% else %}bg-warning text-dark{% endif %}">
-                                {% if review.sentiment > 0.2 %}Positive{% elif review.sentiment < -0.2 %}Negative{% else %}Neutral{% endif %}
-                            </span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <h5 class="text-white mt-4">Similar Movies</h5>
-                <div class="d-flex flex-wrap">
-                    {% for sim in similar %}
-                    <div class="card movie-card me-2 mb-2" style="width: 10rem;">
-                        <img src="https://image.tmdb.org/t/p/w500{{ sim.poster_path }}" class="card-img-top" alt="{{ sim.title }} poster">
-                        <div class="card-body">
-                            <h6 class="card-title">{{ sim.title }}</h6>
-                            <a href="{{ url_for('movie_details', movie_id=sim.id) }}" class="btn btn-outline-primary btn-sm">Details</a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <a href="{{ url_for('home') }}" class="btn btn-secondary mt-4">Back to Home</a>
             </div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Movie Backdrop Section -->
+    <section class="movie-backdrop" style="background-image: url('{% if details.Poster != 'N/A' %}{{ details.Poster }}{% else %}{{ url_for('static', filename='images/no-poster.png') }}{% endif %}')">
+        <div class="backdrop-overlay">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="movie-poster-container">
+                            <img src="{{ details.Poster if details.Poster != 'N/A' else url_for('static', filename='images/no-poster.png') }}" class="movie-poster-img" alt="{{ details.Title }} poster">
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="movie-details">
+                            <h1 class="movie-title">{{ details.Title }}</h1>
+                            <div class="movie-meta">
+                                <span class="movie-year">{{ details.Year }}</span>
+                                <span class="movie-dot">•</span>
+                                <span class="movie-runtime">{{ details.Runtime }}</span>
+                                <span class="movie-dot">•</span>
+                                <span class="movie-genre">{{ details.Genre }}</span>
+                            </div>
+                            <div class="movie-rating">
+                                <i class="fas fa-star"></i>
+                                <span>{{ details.imdbRating }}</span>
+                                <span class="text-muted">/10</span>
+                            </div>
+                            <div class="movie-plot">
+                                <p>{{ details.Plot }}</p>
+                            </div>
+                            <div class="movie-stats">
+                                <div class="movie-stat">
+                                    <h5>Director</h5>
+                                    <p>{{ details.Director }}</p>
+                                </div>
+                                <div class="movie-stat">
+                                    <h5>Writer</h5>
+                                    <p>{{ details.Writer }}</p>
+                                </div>
+                                <div class="movie-stat">
+                                    <h5>Released</h5>
+                                    <p>{{ details.Released }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cast Section with Carousel -->
+    <section class="section-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Top Cast</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="cast-carousel">
+                <div class="swiper castSwiper">
+                    <div class="swiper-wrapper">
+                        {% for actor in cast %}
+                        <div class="swiper-slide">
+                            <div class="cast-card">
+                                <div class="cast-img">
+                                    <!-- Using default avatar since we don't have actor images -->
+                                    <img src="{{ url_for('static', filename='images/no-poster.png') }}" alt="{{ actor }}">
+                                </div>
+                                <div class="cast-info">
+                                    <h5>{{ actor }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2>User Reviews & Sentiment Analysis</h2>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="row">
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="col-md-6 mb-4">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="sentiment-badge {% if review.sentiment > 0.2 %}positive{% elif review.sentiment < -0.2 %}negative{% else %}neutral{% endif %}">
+                                    <i class="fas {% if review.sentiment > 0.2 %}fa-thumbs-up{% elif review.sentiment < -0.2 %}fa-thumbs-down{% else %}fa-meh{% endif %}"></i>
+                                    <span>{% if review.sentiment > 0.2 %}Positive{% elif review.sentiment < -0.2 %}Negative{% else %}Neutral{% endif %}</span>
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                <p>{{ review.text[:300] }}{% if review.text|length > 300 %}...{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">No reviews available for this movie.</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Similar Movies Section -->
+    <section class="section-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Similar Movies</h2>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="row">
+                {% if similar %}
+                    {% for movie in similar %}
+                    <div class="col-6 col-md-4 col-lg-2 mb-4">
+                        <div class="movie-card animated-card">
+                            <div class="movie-poster">
+                                <img src="{{ movie.Poster if movie.Poster != 'N/A' else url_for('static', filename='images/no-poster.png') }}" alt="{{ movie.Title }}">
+                                <div class="movie-overlay">
+                                    <div class="movie-info">
+                                        <h5>{{ movie.Title }}</h5>
+                                        <p>{{ movie.Year }}</p>
+                                        <a href="{{ url_for('movie_details', imdb_id=movie.imdbID) }}" class="btn btn-gradient">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="movie-caption">
+                                <h5>{{ movie.Title }}</h5>
+                                <div class="movie-year">{{ movie.Year }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">No similar movies found.</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>MovieMagnet</h4>
+                    <p>Your personal movie recommendation app</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2023 MovieMagnet. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const castSwiper = new Swiper('.castSwiper', {
+            slidesPerView: 2,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 4,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 5,
+                    spaceBetween: 30,
+                },
+            }
+        });
+    </script>
 </body>
 </html>
